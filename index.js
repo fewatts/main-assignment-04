@@ -19,9 +19,23 @@ const isInputValid = (input) => {
  * @param {number} num1 - The first number.
  * @param {string} operator - The arithmetic operator (+, -, *, /).
  * @param {number} num2 - The second number.
- * @returns {number|string} The result of the arithmetic operation, or an error message if invalid.
+ * @returns {string} The formatted result of the arithmetic operation with up to 2 decimal places if necessary,
+ *          or an error message if invalid.
  */
 const calculate = (num1, operator, num2) => {
+   const result = performCalculation(num1, operator, num2);
+   return formatResult(result);
+};
+
+/**
+ * Performs the actual arithmetic calculation based on given numbers and an operator.
+ *
+ * @param {number} num1 - The first number.
+ * @param {string} operator - The arithmetic operator (+, -, *, /).
+ * @param {number} num2 - The second number.
+ * @returns {number} The unformatted result of the arithmetic operation.
+ */
+const performCalculation = (num1, operator, num2) => {
    switch (operator) {
       case "+":
          return num1 + num2;
@@ -38,6 +52,25 @@ const calculate = (num1, operator, num2) => {
          return num1 / 100;
       default:
          return "Invalid option, try again.";
+   }
+};
+
+/**
+ * Formats the calculation result, removing decimal places if they're zero.
+ *
+ * @param {number} result - The unformatted result of the arithmetic operation.
+ * @returns {string} The formatted result with up to 2 decimal places if necessary.
+ */
+const formatResult = (result) => {
+   const formattedResult = parseFloat(result).toString();
+   if (formattedResult.includes(".")) {
+      const [integerPart, decimalPart] = formattedResult.split(".");
+      if (decimalPart === "00") {
+         return integerPart;
+      }
+      return parseFloat(formattedResult);
+   } else {
+      return parseFloat(formattedResult);
    }
 };
 
@@ -77,7 +110,8 @@ const handleButtonClick = (input) => {
  * Calculates a result based on a string input in the valid format.
  *
  * @param {string} input - The input string in the valid format: "num1 operator num2".
- * @returns {number|string} The calculated result or an error message if the input is invalid.
+ * @returns {string} The formatted result of the calculation, showing two decimal places if needed,
+ *          or an error message if the input is invalid.
  */
 const calculateFromString = (input) => {
    const expressions = input.split(" ");
@@ -123,7 +157,7 @@ const handleKeyboardInput = (event) => {
    } else if (key === ".") {
       handleButtonClick(".");
    } else if (key === "Backspace") {
-      if(display.textContent === "0"){
+      if (display.textContent === "0") {
          return;
       }
       handleButtonClick("←");
@@ -139,7 +173,6 @@ document.addEventListener("keydown", handleKeyboardInput);
 const handleBackspace = () => {
    const currentContent = display.textContent;
    const newContent = currentContent.slice(0, -1);
-   console.log(currentContent)
    if (newContent === "") {
       display.textContent = "0";
    } else {
