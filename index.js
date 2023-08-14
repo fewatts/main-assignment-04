@@ -97,6 +97,9 @@ const handleButtonClick = (input) => {
       // Store the operator for the next calculation
       display.textContent += ` ${input} `;
    } else if (input === "←") {
+      if (display.textContent === "0") {
+         return;
+      }
       handleBackspace();
    } else if (input === ".") {
       handleDecimalInput();
