@@ -2,18 +2,6 @@ const display = document.getElementById("display");
 const buttons = document.querySelectorAll(".btn");
 
 /**
- * Checks if the input string matches the valid format for the calculator.
- *
- * @param {string} input - The input string to be validated.
- * @returns {boolean} Returns true if the input matches the valid format, otherwise false.
- */
-const isInputValid = (input) => {
-   const regex =
-      /^((\d+(\.\d+)?%?)\s*([+\-*%/]\s*(\d+(\.\d+)?%?))*)(?:\s*=\s*)?$/;
-   return regex.test(input);
-};
-
-/**
  * Performs arithmetic calculations based on given numbers and an operator.
  *
  * @param {number} num1 - The first number.
@@ -51,7 +39,7 @@ const performCalculation = (num1, operator, num2) => {
       case "%":
          return num1 / 100;
       default:
-         return "Invalid option, try again.";
+         return "Error.";
    }
 };
 
@@ -62,15 +50,15 @@ const performCalculation = (num1, operator, num2) => {
  * @returns {string} The formatted result with up to 2 decimal places if necessary.
  */
 const formatResult = (result) => {
-   const formattedResult = parseFloat(result).toString();
-   if (formattedResult.includes(".")) {
-      const [integerPart, decimalPart] = formattedResult.split(".");
-      if (decimalPart === "00") {
-         return integerPart;
-      }
-      return parseFloat(formattedResult);
+   if (typeof result === "string") {
+      return result;
+   }
+   const formattedResult = parseFloat(result).toFixed(2);
+   const [integerPart, decimalPart] = formattedResult.split(".");
+   if (parseInt(decimalPart) === 0) {
+      return integerPart;
    } else {
-      return parseFloat(formattedResult);
+      return formattedResult;
    }
 };
 
@@ -126,8 +114,7 @@ const calculateFromString = (input) => {
       const num2 = parseFloat(expressions[i + 1]);
       result = calculate(result, operator, num2);
    }
-
-   return result === NaN ? "Error." : result;
+   return isNaN(result) ? "Error." : result;
 };
 
 /**
