@@ -98,7 +98,7 @@ a {
 
 .zero {
     grid-column: span 2;
-  }
+}
 
 .btn {
     background-color: #f2f2f2;
@@ -106,6 +106,7 @@ a {
     border-radius: 5px;
     padding: 10px;
     font-size: 18px;
+    color: black;
     cursor: pointer;
 }
 

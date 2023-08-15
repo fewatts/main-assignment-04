@@ -63,44 +63,70 @@ const formatResult = (result) => {
  * Handle button click events and update the calculator display.
  * @param {string} input - The input received from the clicked button.
  */
+
 const handleButtonClick = (input) => {
    if (input === "=") {
-      display.textContent = calculateFromString(display.textContent);
+      handleEquals();
    } else if (input === "C") {
-      display.textContent = "0";
+      clear();
    } else if (display.textContent === "0" || display.textContent === "Error.") {
-      display.textContent = input;
+      handleStaticDisplay(input);
    } else if (["+", "-", "*", "/", "%"].includes(input)) {
-      const lastChar = display.textContent.slice(-1);
-      const inputWithoutOperator = display.textContent;
-
-      // Check if there are multiple operators and keep the last one
-      const operators = ["+", "-", "*", "/", "%"];
-      const operatorPositions = operators.map((op) =>
-         inputWithoutOperator.lastIndexOf(op)
-      );
-      const lastOperatorPosition = Math.max(...operatorPositions);
-
-      if (
-         lastOperatorPosition === -1 ||
-         lastOperatorPosition === inputWithoutOperator.length - 1
-      ) {
-         // No existing operator or it's the last character, so just append the input
-         display.textContent += ` ${input} `;
-      } else {
-         // Remove the existing operator and replace with the new one
-         display.textContent =
-            inputWithoutOperator.slice(0, lastOperatorPosition) + ` ${input} `;
-      }
+      handleOperatorsInput(input);
    } else if (input === "←") {
-      if (display.textContent !== "0") {
-         handleBackspace();
-      }
+      handleBack();
    } else if (input === ".") {
       handleDecimalInput();
    } else {
-      display.textContent += input;
+      handleDefault(input);
    }
+};
+
+const handleEquals = () => {
+   display.textContent = calculateFromString(display.textContent);
+};
+
+const clear = () => {
+   display.textContent = "0";
+};
+
+const handleStaticDisplay = (input) => {
+   display.textContent = input;
+};
+
+const handleOperatorsInput = (input) => {
+   const inputWithoutSpaces = display.textContent.replace(/\s+/g, "");
+
+   if (
+      inputWithoutSpaces.endsWith("+") ||
+      inputWithoutSpaces.endsWith("-") ||
+      inputWithoutSpaces.endsWith("*") ||
+      inputWithoutSpaces.endsWith("/") ||
+      inputWithoutSpaces.endsWith("%")
+   ) {
+      // Remove the last operator and replace with the new one
+      display.textContent = inputWithoutSpaces.slice(0, -1) + ` ${input} `;
+   } else {
+      try {
+         // Calculate the result of the existing expression
+         const result = calculateFromString(inputWithoutSpaces);
+
+         // Append the new operator and the result to the display
+         display.textContent = `${result} ${input} `;
+      } catch (error) {
+         display.textContent = "Error.";
+      }
+   }
+};
+
+const handleBack = () => {
+   if (display.textContent !== "0") {
+      handleBackspace();
+   }
+};
+
+const handleDefault = (input) => {
+   display.textContent += input;
 };
 
 /**
