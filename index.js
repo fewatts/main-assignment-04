@@ -112,11 +112,10 @@ const calculateFromString = (input) => {
  */
 const handleDecimalInput = () => {
    const currentContent = display.textContent;
-   const lastChar = currentContent.slice(-1);
-   if (
-      !currentContent.includes(".") &&
-      (!isNaN(lastChar) || lastChar === ".")
-   ) {
+   const lastValue = currentContent.split(/[-+*/]/).pop();
+
+   // Check if the last value doesn't already include a decimal point
+   if (lastValue && !lastValue.includes(".")) {
       display.textContent += ".";
    }
 };
