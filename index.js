@@ -73,11 +73,24 @@ const handleButtonClick = (input) => {
    } else if (["+", "-", "*", "/", "%"].includes(input)) {
       const lastChar = display.textContent.slice(-1);
       const inputWithoutOperator = display.textContent;
-      if (!isNaN(lastChar)) {
-         display.textContent =
-            calculateFromString(inputWithoutOperator) + ` ${input} `;
+
+      // Check if there are multiple operators and keep the last one
+      const operators = ["+", "-", "*", "/", "%"];
+      const operatorPositions = operators.map((op) =>
+         inputWithoutOperator.lastIndexOf(op)
+      );
+      const lastOperatorPosition = Math.max(...operatorPositions);
+
+      if (
+         lastOperatorPosition === -1 ||
+         lastOperatorPosition === inputWithoutOperator.length - 1
+      ) {
+         // No existing operator or it's the last character, so just append the input
+         display.textContent += ` ${input} `;
       } else {
-         display.textContent = inputWithoutOperator.slice(0, -2) + ` ${input} `;
+         // Remove the existing operator and replace with the new one
+         display.textContent =
+            inputWithoutOperator.slice(0, lastOperatorPosition) + ` ${input} `;
       }
    } else if (input === "←") {
       if (display.textContent !== "0") {
@@ -97,13 +110,18 @@ const handleButtonClick = (input) => {
  *          or an error message if the input is invalid.
  */
 const calculateFromString = (input) => {
-   const expressions = input.split(" ");
+   const expressions = input
+      .split(/([+\-*/%])/)
+      .map((str) => str.trim())
+      .filter((str) => str !== "");
+
    let result = parseFloat(expressions[0]);
    for (let i = 1; i < expressions.length; i += 2) {
       const operator = expressions[i];
       const num2 = parseFloat(expressions[i + 1]);
       result = calculate(result, operator, num2);
    }
+
    return isNaN(result) ? "Error." : result;
 };
 
