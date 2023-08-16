@@ -63,16 +63,15 @@ const formatResult = (result) => {
  */
 
 const handleButtonClick = (input) => {
+   if (display.textContent === "0" && input === "←") return;
    if (input === "=") handleEquals();
    else if (input === "C") clear();
    else if (display.textContent === "0" || display.textContent === "Error.")
       handleStaticDisplay(input);
    else if (["+", "-", "*", "/", "%"].includes(input))
       handleOperatorsInput(input);
-   else if (input === "←") {
-      if (display.textContent === "0") return;
-      handleBack();
-   } else if (input === ".") handleDecimalInput();
+   else if (input === "←") handleBackspace();
+   else if (input === ".") handleDecimalInput();
    else handleDefault(input);
 };
 
@@ -106,10 +105,6 @@ const handleOperatorsInput = (input) => {
          display.textContent = "Error.";
       }
    }
-};
-
-const handleBack = () => {
-   if (display.textContent !== "0") handleBackspace();
 };
 
 const handleDefault = (input) => (display.textContent += input);
