@@ -54,20 +54,29 @@ a {
     text-decoration: none;
 }
 
+.logo{
+    height: auto;
+    width: 80px;
+}
+
 .header {
-    background-color: #f2f2f2;
-    text-align: center;
-    font-size: 30px;
-    padding-top: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: black;
+    color: #f8f8ff;
+    padding-top: 25px;
+    padding-bottom: 20px;
 }
 
 .body {
+    padding-bottom: 70px;
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 65vh;
+    height: 72vh;
 }
 
 .calculator {
@@ -76,6 +85,7 @@ a {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
+    box-shadow: 5px 5px 0px 2px #33658A;
 }
 
 .display {
@@ -111,13 +121,14 @@ a {
 }
 
 .operator {
-    background-color: #f0ad4e;
+    background-color: #33658A;
     color: #fff;
 }
 
 
 .footer {
-    background-color: #f2f2f2;
+    background-color: black;
     text-align: center;
+    color: #f8f8ff;
     padding: 20px;
 }
