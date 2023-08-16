@@ -51,9 +51,7 @@ const performCalculation = (num1, operator, num2) => {
  * @returns {string} The formatted result with up to 2 decimal places if necessary.
  */
 const formatResult = (result) => {
-   if (typeof result === "string") {
-      return result;
-   }
+   if (typeof result === "string") return result;
    const formattedResult = parseFloat(result).toFixed(2);
    const [integerPart, decimalPart] = formattedResult.split(".");
    return parseInt(decimalPart) === 0 ? integerPart : formattedResult;
@@ -65,34 +63,25 @@ const formatResult = (result) => {
  */
 
 const handleButtonClick = (input) => {
-   if (input === "=") {
-      handleEquals();
-   } else if (input === "C") {
-      clear();
-   } else if (display.textContent === "0" || display.textContent === "Error.") {
+   if (input === "=") handleEquals();
+   else if (input === "C") clear();
+   else if (display.textContent === "0" || display.textContent === "Error.")
       handleStaticDisplay(input);
-   } else if (["+", "-", "*", "/", "%"].includes(input)) {
+   else if (["+", "-", "*", "/", "%"].includes(input))
       handleOperatorsInput(input);
-   } else if (input === "←") {
+   else if (input === "←") {
+      if (display.textContent === "0") return;
       handleBack();
-   } else if (input === ".") {
-      handleDecimalInput();
-   } else {
-      handleDefault(input);
-   }
+   } else if (input === ".") handleDecimalInput();
+   else handleDefault(input);
 };
 
-const handleEquals = () => {
-   display.textContent = calculateFromString(display.textContent);
-};
+const handleEquals = () =>
+   (display.textContent = calculateFromString(display.textContent));
 
-const clear = () => {
-   display.textContent = "0";
-};
+const clear = () => (display.textContent = "0");
 
-const handleStaticDisplay = (input) => {
-   display.textContent = input;
-};
+const handleStaticDisplay = (input) => (display.textContent = input);
 
 const handleOperatorsInput = (input) => {
    const inputWithoutSpaces = display.textContent.replace(/\s+/g, "");
@@ -120,14 +109,10 @@ const handleOperatorsInput = (input) => {
 };
 
 const handleBack = () => {
-   if (display.textContent !== "0") {
-      handleBackspace();
-   }
+   if (display.textContent !== "0") handleBackspace();
 };
 
-const handleDefault = (input) => {
-   display.textContent += input;
-};
+const handleDefault = (input) => (display.textContent += input);
 
 /**
  * Calculate a result based on a string input in the valid format.
@@ -159,9 +144,7 @@ const handleDecimalInput = () => {
    const lastValue = currentContent.split(/[-+*/]/).pop();
 
    // Check if the last value doesn't already include a decimal point
-   if (lastValue && !lastValue.includes(".")) {
-      display.textContent += ".";
-   }
+   if (lastValue && !lastValue.includes(".")) display.textContent += ".";
 };
 
 /**
@@ -170,17 +153,12 @@ const handleDecimalInput = () => {
  */
 const handleKeyboardInput = (event) => {
    const key = event.key;
-   if (key === "Enter") {
-      handleButtonClick("=");
-   } else if (key === "Escape") {
-      handleButtonClick("C");
-   } else if (/[0-9]/.test(key) || /[\+\-\*/%]/.test(key) || key === ".") {
+   if (key === "Enter") handleButtonClick("=");
+   else if (key === "Escape") handleButtonClick("C");
+   else if (/[0-9]/.test(key) || /[\+\-\*/%]/.test(key) || key === ".")
       handleButtonClick(key);
-   } else if (key === "Backspace") {
-      if (display.textContent !== "0") {
-         handleButtonClick("←");
-      }
-   }
+   else if (key === "Backspace")
+      if (display.textContent !== "0") handleButtonClick("←");
 };
 
 // Add event listener for keyboard input
